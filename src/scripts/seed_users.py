@@ -3,6 +3,7 @@ import pymongo
 import bcrypt
 from dotenv import load_dotenv
 import sys
+from pymongo import uri_parser # Add this import
 
 # Determine the project root directory (assuming the script is in src/scripts)
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -92,7 +93,7 @@ try:
     print("✅ Successfully connected to MongoDB server.")
 
     # Infer database name from URI if not specified, otherwise use DATABASE_NAME
-    db_name = pymongo.uri_parser.parse_uri(MONGODB_URI)['database']
+    db_name = uri_parser.parse_uri(MONGODB_URI)['database'] # Use the imported uri_parser
     if not db_name:
         if DATABASE_NAME == "your_database_name": # Check if placeholder is still used
              print(f"Error: Database name not found in URI and DATABASE_NAME placeholder is not replaced.")
