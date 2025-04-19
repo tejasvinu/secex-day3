@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions'; // Corrected import path
 import ObservationModel from '@/models/Observation';
 import { connectToMongoDB } from '@/lib/mongodb'; // Corrected import
 import mongoose from 'mongoose';
