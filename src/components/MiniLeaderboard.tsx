@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Medal, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Medal, Crown, Trophy, ArrowRight } from 'lucide-react';
 
 interface LeaderboardEntry {
   id: string;
@@ -19,7 +18,6 @@ interface LeaderboardEntry {
 export function MiniLeaderboard() {
   const [leaders, setLeaders] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userPosition, setUserPosition] = useState<LeaderboardEntry | null>(null);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -39,28 +37,31 @@ export function MiniLeaderboard() {
           }));
           
           setLeaders(topLeaders);
-          
-          // Find current user's position if they're not in top 5
-          // This would require sending the user's ID in the request or matching based on session
-          // Simplified for demo purposes
         }
       } catch (error) {
-          console.error('Failed to fetch leaderboard:', error);
-          // Set sample data for demo
-          setLeaders([
-            { id: '1', name: 'Alice Defender', score: 450, rank: 1, eventCount: 12 },
-            { id: '2', name: 'Bob Sentinel', score: 380, rank: 2, eventCount: 10 },
-            { id: '3', name: 'Charlie Monitor', score: 320, rank: 3, eventCount: 9 },
-            { id: '4', name: 'Dana Watcher', score: 280, rank: 4, eventCount: 8 },
-            { id: '5', name: 'Eliot Scanner', score: 210, rank: 5, eventCount: 6 },
-          ]);
-        } finally {
-          setLoading(false);
-        }
-      };
-      
-      fetchLeaderboard();
-    }, []);
+        console.error('Failed to fetch leaderboard:', error);
+        // Set sample data for demo
+        setLeaders([
+          { id: '1', name: 'Alice Defender', score: 250, rank: 1, eventCount: 8 },
+          { id: '2', name: 'Bob Sentinel', score: 180, rank: 2, eventCount: 6 },
+          { id: '3', name: 'Charlie Monitor', score: 120, rank: 3, eventCount: 4 },
+          { id: '4', name: 'Dana Watcher', score: 90, rank: 4, eventCount: 3 },
+          { id: '5', name: 'Eliot Scanner', score: 60, rank: 5, eventCount: 2 },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchLeaderboard();
+  }, []);
+
+  const getRankIcon = (rank: number) => {
+    if (rank === 1) return <Crown className="h-4 w-4 text-yellow-500" />;
+    if (rank === 2) return <Medal className="h-4 w-4 text-gray-400" />;
+    if (rank === 3) return <Trophy className="h-4 w-4 text-amber-600" />;
+    return null;
+  };
 
   if (loading) {
     return (
@@ -84,65 +85,35 @@ export function MiniLeaderboard() {
         <CardTitle className="text-sm font-medium flex items-center justify-between">
           <div className="flex items-center gap-1">
             <Medal className="h-4 w-4 text-yellow-500" />
-            Top Observers
+            Top Verified Observers
           </div>
-          <Link href="/leaderboard" passHref>
-            <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
-              Full Leaderboard
-              <ExternalLink className="h-3 w-3" />
-            </Button>
+          <Link href="/leaderboard" className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
+            View All
+            <ArrowRight className="h-3 w-3" />
           </Link>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="space-y-2">
-          {leaders.map((leader, index) => (
-            <div key={leader.id} className="flex items-center justify-between py-1">
-              <div className="flex items-center gap-2">
-                <div className={`flex items-center justify-center w-5 h-5 rounded-full text-xs font-semibold ${
-                  leader.rank === 1 ? 'bg-yellow-400 text-yellow-900' : 
-                  leader.rank === 2 ? 'bg-gray-300 text-gray-800' :
-                  leader.rank === 3 ? 'bg-amber-600 text-amber-100' :
-                  'bg-gray-200 text-gray-800'
-                }`}>
-                  {leader.rank}
+        <div className="space-y-3">
+          {leaders.map((entry) => (
+            <div key={entry.id} className="flex items-center gap-2">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={entry.avatarUrl} />
+                <AvatarFallback className="text-xs bg-primary/10">
+                  {entry.name.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  {getRankIcon(entry.rank)}
+                  <p className="font-medium text-sm truncate">{entry.name}</p>
                 </div>
-                <Avatar className="h-6 w-6">
-                  <AvatarFallback className="text-[10px]">
-                    {leader.name.substring(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium truncate max-w-[120px]">
-                  {leader.name}
-                </span>
+                <p className="text-xs text-muted-foreground">
+                  {entry.score} pts • {entry.eventCount} verified
+                </p>
               </div>
-              <span className="text-sm font-mono font-semibold text-primary">
-                {leader.score}
-              </span>
             </div>
           ))}
-          
-          {userPosition && userPosition.rank > 5 && (
-            <>
-              <div className="border-t border-dashed border-gray-200 my-2"></div>
-              <div className="flex items-center justify-between py-1">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                    {userPosition.rank}
-                  </div>
-                  <Avatar className="h-6 w-6">
-                    <AvatarFallback className="text-[10px] bg-primary/20">
-                      {userPosition.name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm font-medium">You</span>
-                </div>
-                <span className="text-sm font-mono font-semibold text-primary">
-                  {userPosition.score}
-                </span>
-              </div>
-            </>
-          )}
         </div>
       </CardContent>
     </Card>

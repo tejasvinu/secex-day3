@@ -68,6 +68,7 @@ const eventCategories = {
       { value: "win_delete_user", label: "Deleting user account", score: severityScores.high, severity: "high" },
       { value: "win_rdp_fail", label: "RDP login failure", score: severityScores.high, severity: "high" },
       { value: "win_rdp_success", label: "RDP login success", score: severityScores.low, severity: "low" },
+      { value: "win_other", label: "Other Windows Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
     ]
   },
   rtu: {
@@ -82,6 +83,7 @@ const eventCategories = {
       { value: "rtu_upload_config", label: "Upload configuration successfully", score: severityScores.low, severity: "low" },
       { value: "rtu_download_config", label: "Download configuration files successfully", score: severityScores.low, severity: "low" },
       { value: "rtu_manual_reset", label: "Manual Reset", score: severityScores.medium, severity: "medium" },
+      { value: "rtu_other", label: "Other RTU Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
     ]
   },
   amt: {
@@ -101,6 +103,7 @@ const eventCategories = {
       { value: "amt_unknown_device_search", label: "Unknown Device Searching for Host", score: severityScores.medium, severity: "medium" },
       { value: "amt_tcp_termination", label: "TCP Connection Termination", score: severityScores.low, severity: "low" },
       { value: "amt_no_comm", label: "No Communication", score: severityScores.medium, severity: "medium" },
+      { value: "amt_other", label: "Other AMT Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
     ]
   },
   plc: {
@@ -112,6 +115,7 @@ const eventCategories = {
       { value: "plc_login_success", label: "Login successful", score: severityScores.low, severity: "low" },
       { value: "plc_login_denied", label: "Login denied", score: severityScores.high, severity: "high" },
       { value: "plc_cpu_stop", label: "Current CPU operating mode: STOP", score: severityScores.high, severity: "high" },
+      { value: "plc_other", label: "Other PLC Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
     ]
   },
   linux: {
@@ -123,16 +127,17 @@ const eventCategories = {
       { value: "linux_auth_success", label: "Authentication success", score: severityScores.low, severity: "low" },
       { value: "linux_auth_fail", label: "Authentication failure", score: severityScores.high, severity: "high" },
       { value: "linux_rm_file", label: "Removed a file/directory using 'rm' command", score: severityScores.medium, severity: "medium" },
+      { value: "linux_other", label: "Other Linux Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
     ]
   },
-  // Add the 'Other' category
+  // Add the general 'Other' category back
   other: {
     name: "Other Events",
     icon: QuestionMarkCircleIcon, // Use the imported icon
     color: "bg-gray-100 text-gray-800", // Neutral color
     iconColor: "text-gray-500", // Neutral icon color
     events: [
-      { value: "other_event", label: "Other (Specify in summary)", score: severityScores.informational, severity: "informational" } // Define the 'Other' event
+      { value: "other_event", label: "Other (Specify in summary)", score: severityScores.informational, severity: "informational" } // Define the general 'Other' event
     ]
   }
 };
@@ -241,16 +246,36 @@ export function ObservationEntryForm() {
   }
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
-      <CardHeader>
-        {/* Updated Title and Description */}
-        <CardTitle>Register Event Observation</CardTitle>
-        <CardDescription>Record the event you observed in ELK here.</CardDescription>
+    <Card className="w-full max-w-2xl mx-auto shadow-lg">
+      <CardHeader className="space-y-2 pb-6 border-b">
+        <CardTitle className="text-2xl font-bold text-primary">Register Event Observation</CardTitle>
+        <CardDescription className="text-base">
+          Record security events observed in ELK logs for scoring and verification.
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">          {/* Enhanced Event Heading Dropdown with Categories and Search */}
-          <div className="space-y-1.5">
-            <Label htmlFor="eventHeading">Event Heading</Label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 py-6">
+          {/* Success/Error Messages */}
+          {error && (
+            <Alert variant="destructive" className="animate-in fade-in duration-300">
+              <AlertCircle className="h-5 w-5" />
+              <AlertTitle className="font-semibold">Submission Failed</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          {success && (
+            <Alert variant="default" className="bg-green-50 border-green-200 text-green-800 animate-in fade-in duration-300">
+              <CheckCircleIcon className="h-5 w-5 text-green-600" />
+              <AlertTitle className="font-semibold">Success</AlertTitle>
+              <AlertDescription>{success}</AlertDescription>
+            </Alert>
+          )}
+
+          {/* Event Heading */}
+          <div className="space-y-3">
+            <Label htmlFor="eventHeading" className="text-base font-medium">
+              Event Type
+            </Label>
             <Controller
               control={control}
               name="eventHeading"
@@ -263,21 +288,23 @@ export function ObservationEntryForm() {
                       aria-expanded={open}
                       aria-label="Select an event"
                       className={cn(
-                        "w-full justify-between text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        "w-full justify-between text-left font-normal py-5 transition-all",
+                        !field.value && "text-muted-foreground",
+                        errors.eventHeading && "border-red-500 focus-visible:ring-red-500"
                       )}
                     >
                       {field.value ? (
                         <>
                           {(() => {
-                            // Find the selected event and its category
                             for (const [categoryKey, category] of Object.entries(eventCategories)) {
                               const event = category.events.find(e => e.value === field.value);
                               if (event) {
                                 const CategoryIcon = category.icon;
                                 return (
                                   <div className="flex items-center gap-2">
-                                    <CategoryIcon className={`h-4 w-4 ${category.iconColor}`} />
+                                    <div className={`p-1 rounded-md ${category.color}`}>
+                                      <CategoryIcon className={`h-5 w-5 ${category.iconColor}`} />
+                                    </div>
                                     <span>{`${category.name.split(' ')[0]}: ${event.label}`}</span>
                                   </div>
                                 );
@@ -288,24 +315,25 @@ export function ObservationEntryForm() {
                         </>
                       ) : (
                         <div className="flex items-center gap-2">
-                          <Search className="h-4 w-4 text-gray-400" />
-                          <span>Select an event...</span>
+                          <Search className="h-5 w-5 text-gray-400" />
+                          <span>Select an event type...</span>
                         </div>
                       )}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="p-0 w-[--radix-popover-trigger-width] max-h-[400px] overflow-y-auto" align="start"> {/* Adjusted width and max-height */}
+                  <PopoverContent className="p-0 w-[--radix-popover-trigger-width] max-h-[400px] overflow-y-auto" align="start">
                     <Command shouldFilter={false}>
                       <CommandInput 
                         placeholder="Search events..." 
                         value={searchValue}
                         onValueChange={setSearchValue}
-                        className="h-9"
+                        className="h-11 outline-none focus-visible:ring-0 border-b" // Added outline-none and focus-visible:ring-0, added border-b for separation
                       />
                       <CommandList>
-                        <CommandEmpty>No events found.</CommandEmpty>
+                        <CommandEmpty className="py-3 text-center text-sm">
+                          No events found.
+                        </CommandEmpty>
                         {Object.entries(eventCategories).map(([categoryKey, category]) => {
-                          // Filter events based on search
                           const filteredEvents = searchValue 
                             ? category.events.filter(event => 
                                 event.label.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -317,12 +345,11 @@ export function ObservationEntryForm() {
                           return (
                             <CommandGroup key={categoryKey} heading={category.name} className="py-2">
                               {filteredEvents.map((event) => {
-                                // Get severity class for visual indicator
                                 const severityColor = 
                                   event.severity === "critical" ? "bg-red-500" :
                                   event.severity === "high" ? "bg-orange-400" :
                                   event.severity === "medium" ? "bg-yellow-300" :
-                                  event.severity === "low" ? "bg-green-300" : "bg-gray-300"; // Added gray for informational/other
+                                  event.severity === "low" ? "bg-green-300" : "bg-gray-300";
                                 
                                 return (
                                   <CommandItem
@@ -333,21 +360,21 @@ export function ObservationEntryForm() {
                                       setOpen(false);
                                       setSearchValue("");
                                     }}
-                                    className="flex items-center gap-2 hover:bg-gray-100 transition-colors py-2"
+                                    className="flex items-center gap-2 hover:bg-gray-50 transition-colors py-3 px-4 cursor-pointer"
                                   >
-                                    <div className="flex items-center space-x-2 flex-1">
-                                      <div className="flex items-center justify-center">
+                                    <div className="flex items-center space-x-3 flex-1">
+                                      <div className={`p-1 rounded-md ${category.color}`}>
                                         {React.createElement(category.icon, { 
-                                          className: `h-4 w-4 ${category.iconColor}` 
+                                          className: `h-5 w-5 ${category.iconColor}` 
                                         })}
                                       </div>
-                                      <div className="ml-2 flex items-center gap-2">
-                                        <span className={`h-2 w-2 rounded-full ${severityColor}`} />
-                                        <span>{event.label}</span>
+                                      <div className="flex items-center gap-2">
+                                        <span className={`h-2.5 w-2.5 rounded-full ${severityColor}`} />
+                                        <span className="font-medium">{event.label}</span>
                                       </div>
                                     </div>
                                     {event.value === field.value && (
-                                      <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                                      <CheckCircleIcon className="h-5 w-5 text-green-500 ml-2" />
                                     )}
                                   </CommandItem>
                                 );
@@ -361,51 +388,63 @@ export function ObservationEntryForm() {
                 </Popover>
               )}
             />
-            {errors.eventHeading && <p className="text-sm text-red-500">{errors.eventHeading.message}</p>}
+            {errors.eventHeading && (
+              <p className="text-sm text-red-500 animate-in fade-in duration-300">{errors.eventHeading.message}</p>
+            )}
           </div>
 
           {/* Event Summary */}
-          <div className="space-y-1.5">
-            <Label htmlFor="eventSummary">Event Summary (max 2 sentences)</Label>
+          <div className="space-y-3">
+            <Label htmlFor="eventSummary" className="text-base font-medium">Event Summary</Label>
             <Textarea
               id="eventSummary"
-              placeholder="Describe the observed event concisely."
-              {...register("eventSummary")} // Use register here
+              placeholder="Describe what you observed in the logs (max 2 sentences)"
+              className={cn(
+                "min-h-[120px] resize-none transition-all",
+                errors.eventSummary && "border-red-500 focus-visible:ring-red-500"
+              )}
+              {...register("eventSummary")}
             />
-            {errors.eventSummary && <p className="text-sm text-red-500">{errors.eventSummary.message}</p>}
+            {errors.eventSummary && (
+              <p className="text-sm text-red-500 animate-in fade-in duration-300">{errors.eventSummary.message}</p>
+            )}
           </div>
 
           {/* Time Noted */}
-          <div className="space-y-1.5">
-            <Label htmlFor="timeNoted">Time Noted (from ELK logs)</Label>
-            <Input
-              id="timeNoted"
-              placeholder="e.g., 2024-04-19T10:35:12Z or 10:35 AM"
-              {...register("timeNoted")} // Use register here
-            />
-            {errors.timeNoted && <p className="text-sm text-red-500">{errors.timeNoted.message}</p>}
+          <div className="space-y-3">
+            <Label htmlFor="timeNoted" className="text-base font-medium">Time Noted</Label>
+            <div className="flex gap-3">
+              <Input
+                id="timeNoted"
+                placeholder="e.g., 2024-04-19T10:35:12Z"
+                className={cn(
+                  "flex-1 transition-all",
+                  errors.timeNoted && "border-red-500 focus-visible:ring-red-500"
+                )}
+                {...register("timeNoted")}
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                className="min-w-[100px]"
+                onClick={() => setValue("timeNoted", new Date().toISOString())}
+              >
+                Set Now
+              </Button>
+            </div>
+            {errors.timeNoted && (
+              <p className="text-sm text-red-500 animate-in fade-in duration-300">{errors.timeNoted.message}</p>
+            )}
           </div>
 
-          {/* Display Success/Error Messages */}
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Submission Failed</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          {success && (
-            <Alert variant="default" className="bg-green-100 border-green-300 text-green-800">
-              <CheckCircleIcon className="h-4 w-4 text-green-600" /> {/* Changed icon */}
-              <AlertTitle>Success</AlertTitle>
-              <AlertDescription>{success}</AlertDescription>
-            </Alert>
-          )}
-
-          <Button type="submit" disabled={isLoading} className="w-full">
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className="w-full py-6 text-lg font-medium mt-6 transition-all"
+          >
             {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {/* Added spinner */}
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                 Submitting...
               </>
             ) : (

@@ -1,34 +1,50 @@
-// filepath: c:\Users\tejasv\Documents\secex-day3\src\app\leaderboard\page.tsx
 'use client';
 
-import { LiveScoreboard } from "@/components/LiveScoreboard";
+import { Shield, CheckCircle2 } from 'lucide-react';
+import { LiveScoreboard } from '@/components/LiveScoreboard';
+import { Card } from '@/components/ui/card';
 
 export default function LeaderboardPage() {
   return (
     <div className="container py-8 mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Security Observations Leaderboard</h1>
-      <p className="text-center text-muted-foreground mb-8">
-        See who has reported the most significant security events and accumulated the highest scores.
-      </p>
-      
       <div className="max-w-4xl mx-auto">
-        <LiveScoreboard />
-      </div>
-      
-      <div className="mt-8 max-w-2xl mx-auto bg-muted/30 rounded-lg p-4 text-sm text-muted-foreground">
-        <h2 className="font-semibold mb-2 text-foreground">How Scoring Works</h2>
-        <p className="mb-2">
-          Participants earn points by reporting security events observed in the system. Events are scored based on their security significance:
-        </p>
-        <ul className="list-disc pl-5 space-y-1">
-          <li><span className="text-red-500 font-medium">Critical events</span>: Maximum points (DOS attacks, unauthorized access)</li>
-          <li><span className="text-orange-500 font-medium">High severity events</span>: High points (login failures, port scans)</li>
-          <li><span className="text-yellow-500 font-medium">Medium severity events</span>: Medium points (system restarts, config changes)</li>
-          <li><span className="text-green-500 font-medium">Low severity events</span>: Minimum points (normal logins, typical activities)</li>
-        </ul>
-        <p className="mt-2">
-          The leaderboard updates in real-time as participants submit new security observations.
-        </p>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-2">
+            <Shield className="h-8 w-8 text-blue-500" />
+            Security Observations Leaderboard
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Tracking verified security observations from our community
+          </p>
+        </div>
+
+        <div className="mb-8">
+          <LiveScoreboard />
+        </div>
+        
+        <div className="w-full">
+          <Card className="p-6 bg-card/50">
+            <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-500" />
+              Verification Process
+            </h2>
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <p>
+                Only verified security observations are included in the leaderboard rankings.
+                Each submission is reviewed by our security team to ensure:
+              </p>
+              <ul className="list-disc pl-4 space-y-1 mt-2">
+                <li>Accuracy and validity of the reported event</li>
+                <li>Appropriate severity classification</li>
+                <li>No duplicate submissions</li>
+                <li>Proper documentation and evidence</li>
+              </ul>
+              <p className="mt-2 text-xs border-t border-border/50 pt-2">
+                Rankings update in real-time as new observations are verified. Submit your observations to participate!
+              </p>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );
