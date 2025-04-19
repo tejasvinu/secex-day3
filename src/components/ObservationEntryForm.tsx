@@ -41,7 +41,8 @@ import {
   ShieldExclamationIcon,
   CpuChipIcon,
   CommandLineIcon,
-  CheckCircleIcon // Keep CheckCircleIcon
+  CheckCircleIcon, // Keep CheckCircleIcon
+  QuestionMarkCircleIcon // Import QuestionMarkCircleIcon
 } from "@heroicons/react/24/outline";
 
 // Define score values for each severity level
@@ -49,7 +50,8 @@ const severityScores = {
   critical: 50,   // Critical security events
   high: 30,       // High severity security events
   medium: 20,     // Medium severity security events
-  low: 10         // Low severity/routine events
+  low: 10,        // Low severity/routine events
+  informational: 5 // Score for 'Other' or informational events
 };
 
 // Define categorized event options with icons and colors
@@ -121,6 +123,16 @@ const eventCategories = {
       { value: "linux_auth_success", label: "Authentication success", score: severityScores.low, severity: "low" },
       { value: "linux_auth_fail", label: "Authentication failure", score: severityScores.high, severity: "high" },
       { value: "linux_rm_file", label: "Removed a file/directory using 'rm' command", score: severityScores.medium, severity: "medium" },
+    ]
+  },
+  // Add the 'Other' category
+  other: {
+    name: "Other Events",
+    icon: QuestionMarkCircleIcon, // Use the imported icon
+    color: "bg-gray-100 text-gray-800", // Neutral color
+    iconColor: "text-gray-500", // Neutral icon color
+    events: [
+      { value: "other_event", label: "Other (Specify in summary)", score: severityScores.informational, severity: "informational" } // Define the 'Other' event
     ]
   }
 };
@@ -309,7 +321,8 @@ export function ObservationEntryForm() {
                                 const severityColor = 
                                   event.severity === "critical" ? "bg-red-500" :
                                   event.severity === "high" ? "bg-orange-400" :
-                                  event.severity === "medium" ? "bg-yellow-300" : "bg-green-300";
+                                  event.severity === "medium" ? "bg-yellow-300" :
+                                  event.severity === "low" ? "bg-green-300" : "bg-gray-300"; // Added gray for informational/other
                                 
                                 return (
                                   <CommandItem
