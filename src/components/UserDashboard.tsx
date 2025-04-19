@@ -128,7 +128,7 @@ export default function UserDashboard({ userId }: { userId: string }) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Event Dashboard</h2>
-        <Link href="/submit-event">
+        <Link href="/submit-observation">
           <Button className="flex items-center gap-2">
             <span>Submit New Event</span>
           </Button>

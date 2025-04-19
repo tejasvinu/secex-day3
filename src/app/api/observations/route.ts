@@ -12,6 +12,7 @@ const observationSchema = z.object({
   eventHeading: z.string().min(1),
   eventSummary: z.string().min(10).max(280),
   timeNoted: z.string().min(1),
+  score: z.number().default(10), // Accept score from frontend with default of 10
 });
 
 export async function POST(request: Request) {
@@ -25,15 +26,13 @@ export async function POST(request: Request) {
 
   try {
     await connectToMongoDB(); // Use the correct function name
-    const body = await request.json();
-
-    // 2. Validate incoming data
+    const body = await request.json();    // 2. Validate incoming data
     const validation = observationSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json({ message: 'Invalid input.', errors: validation.error.flatten().fieldErrors }, { status: 400 });
     }
 
-    const { eventHeading, eventSummary, timeNoted } = validation.data;
+    const { eventHeading, eventSummary, timeNoted, score } = validation.data;
     const userId = new Types.ObjectId(session.user._id); // Use userId
 
     // 3. Create and save the new observation
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
       timeNoted,
       submittedAt: new Date(),
       isVerified: null,
-      score: 0,
+      score: score || 10, // Use score from frontend or default to 10
     });
 
     await newObservation.save();

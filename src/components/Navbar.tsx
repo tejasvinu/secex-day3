@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, LogIn, UserPlus, BarChart2, FileText, Settings, LogOut, ShieldCheck, Edit, Trophy } from 'lucide-react'; // Added Trophy icon
+import { Menu, Home, LogIn, UserPlus, BarChart2, FileText, Settings, LogOut, ShieldCheck, Edit, Trophy, Medal } from 'lucide-react';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -19,13 +19,12 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link href="/" passHref><Button variant="ghost">Home</Button></Link>
-
-          {isParticipant && (
+          <Link href="/" passHref><Button variant="ghost">Home</Button></Link>          {isParticipant && (
             <>
               <Link href="/dashboard" passHref><Button variant="ghost">Dashboard</Button></Link>
               {/* Updated Link Text */}
               <Link href="/submit-observation" passHref><Button variant="ghost">Submit Event</Button></Link>
+              <Link href="/leaderboard" passHref><Button variant="ghost">Leaderboard</Button></Link>
             </>
           )}
 
@@ -60,13 +59,12 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent side="right">
               <nav className="grid gap-4 py-6">
-                <Link href="/" className="flex items-center gap-2 text-lg font-semibold"><Home size={18}/> Home</Link>
-
-                {isParticipant && (
+                <Link href="/" className="flex items-center gap-2 text-lg font-semibold"><Home size={18}/> Home</Link>                {isParticipant && (
                   <>
                     <Link href="/dashboard" className="flex items-center gap-2"><BarChart2 size={18}/> Dashboard</Link>
                     {/* Updated Link Text */}
                     <Link href="/submit-observation" className="flex items-center gap-2"><Edit size={18}/> Submit Event</Link>
+                    <Link href="/leaderboard" className="flex items-center gap-2"><Medal size={18}/> Leaderboard</Link>
                   </>
                 )}
 
