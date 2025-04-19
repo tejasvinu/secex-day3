@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import UserModel from '@/models/User'; // Assuming your user model is named User
 import { connectToMongoDB } from '@/lib/mongodb'; // Corrected import
 

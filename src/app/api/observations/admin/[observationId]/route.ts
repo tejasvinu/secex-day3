@@ -11,12 +11,20 @@ interface VerifyRequestBody {
   adminNotes?: string;
 }
 
+// Define the context type explicitly for route handlers
+interface RouteContext {
+  params: {
+    observationId: string;
+  };
+}
+
+
 export async function PUT(
   request: Request,
-  { params }: { params: { observationId: string } }
+  context: RouteContext // Use the defined interface here
 ) {
   const session = await getServerSession(authOptions);
-  const { observationId } = params;
+  const { observationId } = context.params; // Access params from the context object
 
   // Check if user is authenticated and is an admin
   // @ts-ignore // Ignore TypeScript error for custom session property
