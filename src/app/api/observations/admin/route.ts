@@ -14,13 +14,40 @@ export async function GET(request: Request) {
   }
 
   await connectToMongoDB(); // Use the correct function name
-
   try {
-    // Fetch observations, optionally filter for unverified ones
-    // Populate the userId field to get user details (like email or name if needed later)
-    const observations = await ObservationModel.find({ isVerified: null }) // Fetch only unverified
-      .populate('userId', 'email name') // Adjust fields as needed
-      .sort({ submittedAt: -1 }); // Show newest first
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
+    const status = searchParams.get('status');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+
+    // Build query
+    const query: any = {};
+
+    // Add status filter
+    if (status === 'unverified') {
+      query.isVerified = null;
+    } else if (status === 'verified') {
+      query.isVerified = true;
+    } else if (status === 'rejected') {
+      query.isVerified = false;
+    }
+
+    // Add date range filter
+    if (startDate || endDate) {
+      query.submittedAt = {};
+      if (startDate) query.submittedAt.$gte = new Date(startDate);
+      if (endDate) query.submittedAt.$lte = new Date(endDate);
+    }
+
+    // Category filter will be applied to eventHeading
+    if (category && category !== 'all') {
+      query.eventHeading = new RegExp(category, 'i');
+    }
+
+    const observations = await ObservationModel.find(query)
+      .populate('userId', 'email name')
+      .sort({ submittedAt: -1 });
 
     return NextResponse.json(observations, { status: 200 });
   } catch (error) {

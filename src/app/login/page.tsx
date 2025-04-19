@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react'; // Import getSession
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,8 +33,15 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Invalid credentials. Please check your email and password.');
       } else if (result?.ok) {
-        router.push('/dashboard');
-        router.refresh();
+        // Fetch the session to get user details including role
+        const session = await getSession();
+        // @ts-ignore
+        if (session?.user?.role === 'admin') {
+          router.push('/admin/dashboard');
+        } else {
+          router.push('/dashboard');
+        }
+        router.refresh(); // Refresh the page to ensure session state is fully updated
       } else {
         setError('Login failed. Please try again.');
       }
