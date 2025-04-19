@@ -47,10 +47,10 @@ import {
 
 // Define score values for each severity level
 const severityScores = {
-  critical: 50,   // Critical security events
-  high: 30,       // High severity security events
-  medium: 20,     // Medium severity security events
-  low: 10,        // Low severity/routine events
+  critical: 30,   // Critical security events
+  high: 15,       // High severity security events
+  medium: 10,     // Medium severity security events
+  low: 5,        // Low severity/routine events
   informational: 5 // Score for 'Other' or informational events
 };
 
@@ -90,14 +90,14 @@ const eventCategories = {
     color: "bg-red-100 text-red-800",
     iconColor: "text-red-500",
     events: [
-      { value: "amt_port_scan", label: "Port Scan", score: severityScores.high, severity: "high" },
-      { value: "amt_unknown_device_network", label: "Unknown Device Entered the Network", score: severityScores.high, severity: "high" },
-      { value: "amt_unauth_comm", label: "Unauthorized Communication", score: severityScores.critical, severity: "critical" },
+      { value: "amt_port_scan", label: "Port Scan", score: severityScores.high, severity: "low" },
+      { value: "amt_unknown_device_network", label: "Unknown Device Entered the Network", score: severityScores.high, severity: "low" },
+      { value: "amt_unauth_comm", label: "Unauthorized Communication", score: severityScores.critical, severity: "low" },
       { value: "amt_ip_mac_mismatch", label: "IP MAC Pairing Mismatch", score: severityScores.medium, severity: "medium" },
-      { value: "amt_host_scan", label: "Host Scan", score: severityScores.high, severity: "high" },
-      { value: "amt_suspected_flooding", label: "Suspected Flooding", score: severityScores.medium, severity: "medium" },
-      { value: "amt_dos_attack", label: "DOS Attack", score: severityScores.critical, severity: "critical" },
-      { value: "amt_suspicious_apdu", label: "Suspicious APDU from MTU to RTU", score: severityScores.high, severity: "high" },
+      { value: "amt_host_scan", label: "Host Scan", score: severityScores.high, severity: "medium" },
+      { value: "amt_suspected_flooding", label: "Suspected Flooding", score: severityScores.medium, severity: "low" },
+      { value: "amt_dos_attack", label: "DOS Attack", score: severityScores.critical, severity: "low" },
+      { value: "amt_suspicious_apdu", label: "Suspicious APDU from MTU to RTU", score: severityScores.high, severity: "low" },
       { value: "amt_unknown_device_search", label: "Unknown Device Searching for Host", score: severityScores.medium, severity: "medium" },
       { value: "amt_tcp_termination", label: "TCP Connection Termination", score: severityScores.low, severity: "low" },
       { value: "amt_no_comm", label: "No Communication", score: severityScores.medium, severity: "medium" },
