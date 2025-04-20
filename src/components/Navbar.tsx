@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-800 text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold">CTF Platform</Link>
+        <Link href="/" className="text-xl font-bold">CII SecEX 2025</Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-4">
