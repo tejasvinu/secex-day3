@@ -102,6 +102,7 @@ hardcoded_oids = [
 
 # --- Ignored User Handles ---
 ignored_handles = {
+    'mgmtuser', # Add mgmtuser here
     'teamk008user', 'teamb010user', 'teamd010user', 'teamm012user',
     'teamk009user', 'teamk010user', 'teamk011user',
     'admin1', 'admin2'
