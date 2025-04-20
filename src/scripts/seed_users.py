@@ -95,7 +95,8 @@ sample_users = [
   { '_id': next(oids_to_assign), 'name': 'Team K004 User', 'email': 'teamk004user@cdac.in', 'role': 'participant', 'handle': 'teamk004user', 'password': 'K0044983!#' },
   { '_id': next(oids_to_assign), 'name': 'Team K005 User', 'email': 'teamk005user@cdac.in', 'role': 'participant', 'handle': 'teamk005user', 'password': 'K005409f!#' },
   { '_id': next(oids_to_assign), 'name': 'Team K006 User', 'email': 'teamk006user@cdac.in', 'role': 'participant', 'handle': 'teamk006user', 'password': 'K0064fad!#' },
-  { '_id': next(oids_to_assign), 'name': 'Team K007 User', 'email': 'teamk007user@cdac.in', 'role': 'participant', 'handle': 'teamk007user', 'password': 'K0074b98!#' },
+  { '_id': next(oids_to_assign), 'name': 'Team K007 User', 'email': 'teamk007user@cdac.in', 'role': 'participant', 'handle': 'teamk007user', 'password': 'K0074b98!#' }, # Last user to get an ID from the list
+  # Users from here onwards were either excluded or there are no more IDs in the iterator
   { 'name': 'Team K008 User', 'email': 'teamk008user@cdac.in', 'role': 'participant', 'handle': 'teamk008user', 'password': 'K008465e!#' }, # Excluded - No _id
   { 'name': 'Team K009 User', 'email': 'teamk009user@cdac.in', 'role': 'participant', 'handle': 'teamk009user', 'password': 'K009448d!#' }, # Excluded - No _id
   { 'name': 'Team K010 User', 'email': 'teamk010user@cdac.in', 'role': 'participant', 'handle': 'teamk010user', 'password': 'K0104c1e!#' }, # Excluded - No _id
