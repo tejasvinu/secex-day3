@@ -32,88 +32,80 @@ if not MONGODB_URI:
 # Same user data as provided previously
 sample_users = [
   # Team Users
-  { 'name': 'Team B001 User', 'email': 'teamb001user@cdac.in', 'role': 'participant', 'handle': 'teamb001user', 'password': 'B001470c!#' },
-  { 'name': 'Team D001 User', 'email': 'teamd001user@cdac.in', 'role': 'participant', 'handle': 'teamd001user', 'password': 'D0014ea1!#' },
-  { 'name': 'Team M001 User', 'email': 'teamm001user@cdac.in', 'role': 'participant', 'handle': 'teamm001user', 'password': 'M0014173!#' },
-  { 'name': 'Team K001 User', 'email': 'teamk001user@cdac.in', 'role': 'participant', 'handle': 'teamk001user', 'password': 'K0014290!#' },
-  { 'name': 'Management User', 'email': 'mgmtuser@cdac.in', 'role': 'participant', 'handle': 'mgmtuser', 'password': 'Mgmt4198!#' },
-  { 'name': 'Team B002 User', 'email': 'teamb002user@cdac.in', 'role': 'participant', 'handle': 'teamb002user', 'password': 'B002498d!#' },
-  { 'name': 'Team B003 User', 'email': 'teamb003user@cdac.in', 'role': 'participant', 'handle': 'teamb003user', 'password': 'B0034a2f!#' },
-  { 'name': 'Team B004 User', 'email': 'teamb004user@cdac.in', 'role': 'participant', 'handle': 'teamb004user', 'password': 'B004492a!#' },
-  { 'name': 'Team B005 User', 'email': 'teamb005user@cdac.in', 'role': 'participant', 'handle': 'teamb005user', 'password': 'B00547f7!#' },
-  { 'name': 'Team B006 User', 'email': 'teamb006user@cdac.in', 'role': 'participant', 'handle': 'teamb006user', 'password': 'B006446e!#' },
-  { 'name': 'Team B007 User', 'email': 'teamb007user@cdac.in', 'role': 'participant', 'handle': 'teamb007user', 'password': 'B00747a2!#' },
-  { 'name': 'Team B008 User', 'email': 'teamb008user@cdac.in', 'role': 'participant', 'handle': 'teamb008user', 'password': 'B00843ff!#' },
-  { 'name': 'Team B009 User', 'email': 'teamb009user@cdac.in', 'role': 'participant', 'handle': 'teamb009user', 'password': 'B0094533!#' },
-  { 'name': 'Team B010 User', 'email': 'teamb010user@cdac.in', 'role': 'participant', 'handle': 'teamb010user', 'password': 'B01041e5!#' }, # Excluded (b101)
-  { 'name': 'Team D002 User', 'email': 'teamd002user@cdac.in', 'role': 'participant', 'handle': 'teamd002user', 'password': 'D002443c!#' },
-  { 'name': 'Team D003 User', 'email': 'teamd003user@cdac.in', 'role': 'participant', 'handle': 'teamd003user', 'password': 'D00345a2!#' }, # Corrected handle
-  { 'name': 'Team D004 User', 'email': 'teamd004user@cdac.in', 'role': 'participant', 'handle': 'teamd004user', 'password': 'D0044710!#' },
-  { 'name': 'Team D005 User', 'email': 'teamd005user@cdac.in', 'role': 'participant', 'handle': 'teamd005user', 'password': 'D0054485!#' },
-  { 'name': 'Team D006 User', 'email': 'teamd006user@cdac.in', 'role': 'participant', 'handle': 'teamd006user', 'password': 'D0064abf!#' },
-  { 'name': 'Team D007 User', 'email': 'teamd007user@cdac.in', 'role': 'participant', 'handle': 'teamd007user', 'password': 'D0074e77!#' },
-  { 'name': 'Team D008 User', 'email': 'teamd008user@cdac.in', 'role': 'participant', 'handle': 'teamd008user', 'password': 'D008459a!#' },
-  { 'name': 'Team D009 User', 'email': 'teamd009user@cdac.in', 'role': 'participant', 'handle': 'teamd009user', 'password': 'D00946e4!#' },
-  { 'name': 'Team D010 User', 'email': 'teamd010user@cdac.in', 'role': 'participant', 'handle': 'teamd010user', 'password': 'D01046c6!#' }, # Excluded (d010)
-  { 'name': 'Team D011 User', 'email': 'teamd011user@cdac.in', 'role': 'participant', 'handle': 'teamd011user', 'password': 'D01141d9!#' },
-  { 'name': 'Team D012 User', 'email': 'teamd012user@cdac.in', 'role': 'participant', 'handle': 'teamd012user', 'password': 'D012454b!#' },
-  { 'name': 'Team M002 User', 'email': 'teamm002user@cdac.in', 'role': 'participant', 'handle': 'teamm002user', 'password': 'M0024fbd!#' },
-  { 'name': 'Team M003 User', 'email': 'teamm003user@cdac.in', 'role': 'participant', 'handle': 'teamm003user', 'password': 'M0034653!#' },
-  { 'name': 'Team M004 User', 'email': 'teamm004user@cdac.in', 'role': 'participant', 'handle': 'teamm004user', 'password': 'M004416e!#' },
-  { 'name': 'Team M005 User', 'email': 'teamm005user@cdac.in', 'role': 'participant', 'handle': 'teamm005user', 'password': 'M0054bdc!#' },
-  { 'name': 'Team M006 User', 'email': 'teamm006user@cdac.in', 'role': 'participant', 'handle': 'teamm006user', 'password': 'M0064f79!#' },
-  { 'name': 'Team M007 User', 'email': 'teamm007user@cdac.in', 'role': 'participant', 'handle': 'teamm007user', 'password': 'M007443e!#' },
-  { 'name': 'Team M008 User', 'email': 'teamm008user@cdac.in', 'role': 'participant', 'handle': 'teamm008user', 'password': 'M0084dea!#' },
-  { 'name': 'Team M009 User', 'email': 'teamm009user@cdac.in', 'role': 'participant', 'handle': 'teamm009user', 'password': 'M0094235!#' },
-  { 'name': 'Team M010 User', 'email': 'teamm010user@cdac.in', 'role': 'participant', 'handle': 'teamm010user', 'password': 'M0104b9c!#' },
-  { 'name': 'Team M011 User', 'email': 'teamm011user@cdac.in', 'role': 'participant', 'handle': 'teamm011user', 'password': 'M0114d63!#' },
-  { 'name': 'Team M012 User', 'email': 'teamm012user@cdac.in', 'role': 'participant', 'handle': 'teamm012user', 'password': 'M0124d7a!#' }, # Excluded (m012)
-  { 'name': 'Team K002 User', 'email': 'teamk002user@cdac.in', 'role': 'participant', 'handle': 'teamk002user', 'password': 'K0024ee0!#' },
-  { 'name': 'Team K003 User', 'email': 'teamk003user@cdac.in', 'role': 'participant', 'handle': 'teamk003user', 'password': 'K0034ee0!#' },
-  { 'name': 'Team K004 User', 'email': 'teamk004user@cdac.in', 'role': 'participant', 'handle': 'teamk004user', 'password': 'K0044983!#' },
-  { 'name': 'Team K005 User', 'email': 'teamk005user@cdac.in', 'role': 'participant', 'handle': 'teamk005user', 'password': 'K005409f!#' },
-  { 'name': 'Team K006 User', 'email': 'teamk006user@cdac.in', 'role': 'participant', 'handle': 'teamk006user', 'password': 'K0064fad!#' },
-  { 'name': 'Team K007 User', 'email': 'teamk007user@cdac.in', 'role': 'participant', 'handle': 'teamk007user', 'password': 'K0074b98!#' },
-  { 'name': 'Team K008 User', 'email': 'teamk008user@cdac.in', 'role': 'participant', 'handle': 'teamk008user', 'password': 'K008465e!#' }, # Excluded (k008)
-  { 'name': 'Team K009 User', 'email': 'teamk009user@cdac.in', 'role': 'participant', 'handle': 'teamk009user', 'password': 'K009448d!#' }, # Excluded (k009)
-  { 'name': 'Team K010 User', 'email': 'teamk010user@cdac.in', 'role': 'participant', 'handle': 'teamk010user', 'password': 'K0104c1e!#' }, # Excluded (k010)
-  { 'name': 'Team K011 User', 'email': 'teamk011user@cdac.in', 'role': 'participant', 'handle': 'teamk011user', 'password': 'K0114f70!#' }, # Excluded (k011)
+  { 'name': 'Team B001 User', 'email': 'teamb001user@cdac.in', 'role': 'participant', 'handle': 'teamb001user', 'password': 'B001470c!#' }, # OID 1
+  { 'name': 'Team D001 User', 'email': 'teamd001user@cdac.in', 'role': 'participant', 'handle': 'teamd001user', 'password': 'D0014ea1!#' }, # OID 2
+  { 'name': 'Team M001 User', 'email': 'teamm001user@cdac.in', 'role': 'participant', 'handle': 'teamm001user', 'password': 'M0014173!#' }, # OID 3
+  { 'name': 'Team K001 User', 'email': 'teamk001user@cdac.in', 'role': 'participant', 'handle': 'teamk001user', 'password': 'K0014290!#' }, # OID 4
+  { 'name': 'Management User', 'email': 'mgmtuser@cdac.in', 'role': 'participant', 'handle': 'mgmtuser', 'password': 'Mgmt4198!#' },    # OID 5
+  { 'name': 'Team B002 User', 'email': 'teamb002user@cdac.in', 'role': 'participant', 'handle': 'teamb002user', 'password': 'B002498d!#' }, # OID 6
+  { 'name': 'Team B003 User', 'email': 'teamb003user@cdac.in', 'role': 'participant', 'handle': 'teamb003user', 'password': 'B0034a2f!#' }, # OID 7
+  { 'name': 'Team B004 User', 'email': 'teamb004user@cdac.in', 'role': 'participant', 'handle': 'teamb004user', 'password': 'B004492a!#' }, # OID 8
+  { 'name': 'Team B005 User', 'email': 'teamb005user@cdac.in', 'role': 'participant', 'handle': 'teamb005user', 'password': 'B00547f7!#' }, # OID 9
+  { 'name': 'Team B006 User', 'email': 'teamb006user@cdac.in', 'role': 'participant', 'handle': 'teamb006user', 'password': 'B006446e!#' }, # OID 10
+  { 'name': 'Team B007 User', 'email': 'teamb007user@cdac.in', 'role': 'participant', 'handle': 'teamb007user', 'password': 'B00747a2!#' }, # OID 11
+  { 'name': 'Team B008 User', 'email': 'teamb008user@cdac.in', 'role': 'participant', 'handle': 'teamb008user', 'password': 'B00843ff!#' }, # OID 12
+  { 'name': 'Team B009 User', 'email': 'teamb009user@cdac.in', 'role': 'participant', 'handle': 'teamb009user', 'password': 'B0094533!#' }, # OID 13
+  { 'name': 'Team B010 User', 'email': 'teamb010user@cdac.in', 'role': 'participant', 'handle': 'teamb010user', 'password': 'B01041e5!#' }, # Ignored
+  { 'name': 'Team D002 User', 'email': 'teamd002user@cdac.in', 'role': 'participant', 'handle': 'teamd002user', 'password': 'D002443c!#' }, # OID 14
+  { 'name': 'Team D003 User', 'email': 'teamd003user@cdac.in', 'role': 'participant', 'handle': 'teamd003user', 'password': 'D00345a2!#' }, # OID 15
+  { 'name': 'Team D004 User', 'email': 'teamd004user@cdac.in', 'role': 'participant', 'handle': 'teamd004user', 'password': 'D0044710!#' }, # OID 16
+  { 'name': 'Team D005 User', 'email': 'teamd005user@cdac.in', 'role': 'participant', 'handle': 'teamd005user', 'password': 'D0054485!#' }, # OID 17
+  { 'name': 'Team D006 User', 'email': 'teamd006user@cdac.in', 'role': 'participant', 'handle': 'teamd006user', 'password': 'D0064abf!#' }, # OID 18
+  { 'name': 'Team D007 User', 'email': 'teamd007user@cdac.in', 'role': 'participant', 'handle': 'teamd007user', 'password': 'D0074e77!#' }, # OID 19
+  { 'name': 'Team D008 User', 'email': 'teamd008user@cdac.in', 'role': 'participant', 'handle': 'teamd008user', 'password': 'D008459a!#' }, # OID 20
+  { 'name': 'Team D009 User', 'email': 'teamd009user@cdac.in', 'role': 'participant', 'handle': 'teamd009user', 'password': 'D00946e4!#' }, # OID 21
+  { 'name': 'Team D010 User', 'email': 'teamd010user@cdac.in', 'role': 'participant', 'handle': 'teamd010user', 'password': 'D01046c6!#' }, # Ignored
+  { 'name': 'Team D011 User', 'email': 'teamd011user@cdac.in', 'role': 'participant', 'handle': 'teamd011user', 'password': 'D01141d9!#' }, # OID 22
+  { 'name': 'Team D012 User', 'email': 'teamd012user@cdac.in', 'role': 'participant', 'handle': 'teamd012user', 'password': 'D012454b!#' }, # OID 23
+  { 'name': 'Team M002 User', 'email': 'teamm002user@cdac.in', 'role': 'participant', 'handle': 'teamm002user', 'password': 'M0024fbd!#' }, # OID 24
+  { 'name': 'Team M003 User', 'email': 'teamm003user@cdac.in', 'role': 'participant', 'handle': 'teamm003user', 'password': 'M0034653!#' }, # OID 25
+  { 'name': 'Team M004 User', 'email': 'teamm004user@cdac.in', 'role': 'participant', 'handle': 'teamm004user', 'password': 'M004416e!#' }, # OID 26
+  { 'name': 'Team M005 User', 'email': 'teamm005user@cdac.in', 'role': 'participant', 'handle': 'teamm005user', 'password': 'M0054bdc!#' }, # OID 27
+  { 'name': 'Team M006 User', 'email': 'teamm006user@cdac.in', 'role': 'participant', 'handle': 'teamm006user', 'password': 'M0064f79!#' }, # OID 28
+  { 'name': 'Team M007 User', 'email': 'teamm007user@cdac.in', 'role': 'participant', 'handle': 'teamm007user', 'password': 'M007443e!#' }, # OID 29
+  { 'name': 'Team M008 User', 'email': 'teamm008user@cdac.in', 'role': 'participant', 'handle': 'teamm008user', 'password': 'M0084dea!#' }, # OID 30
+  { 'name': 'Team M009 User', 'email': 'teamm009user@cdac.in', 'role': 'participant', 'handle': 'teamm009user', 'password': 'M0094235!#' }, # OID 31
+  { 'name': 'Team M010 User', 'email': 'teamm010user@cdac.in', 'role': 'participant', 'handle': 'teamm010user', 'password': 'M0104b9c!#' }, # OID 32
+  { 'name': 'Team M011 User', 'email': 'teamm011user@cdac.in', 'role': 'participant', 'handle': 'teamm011user', 'password': 'M0114d63!#' }, # OID 33
+  { 'name': 'Team M012 User', 'email': 'teamm012user@cdac.in', 'role': 'participant', 'handle': 'teamm012user', 'password': 'M0124d7a!#' }, # Ignored
+  { 'name': 'Team K002 User', 'email': 'teamk002user@cdac.in', 'role': 'participant', 'handle': 'teamk002user', 'password': 'K0024ee0!#' }, # OID 34
+  { 'name': 'Team K003 User', 'email': 'teamk003user@cdac.in', 'role': 'participant', 'handle': 'teamk003user', 'password': 'K0034ee0!#' }, # OID 35
+  { 'name': 'Team K004 User', 'email': 'teamk004user@cdac.in', 'role': 'participant', 'handle': 'teamk004user', 'password': 'K0044983!#' }, # OID 36
+  { 'name': 'Team K005 User', 'email': 'teamk005user@cdac.in', 'role': 'participant', 'handle': 'teamk005user', 'password': 'K005409f!#' }, # OID 37
+  { 'name': 'Team K006 User', 'email': 'teamk006user@cdac.in', 'role': 'participant', 'handle': 'teamk006user', 'password': 'K0064fad!#' }, # OID 38
+  { 'name': 'Team K007 User', 'email': 'teamk007user@cdac.in', 'role': 'participant', 'handle': 'teamk007user', 'password': 'K0074b98!#' }, # No OID provided
+  { 'name': 'Team K008 User', 'email': 'teamk008user@cdac.in', 'role': 'participant', 'handle': 'teamk008user', 'password': 'K008465e!#' }, # Ignored
+  { 'name': 'Team K009 User', 'email': 'teamk009user@cdac.in', 'role': 'participant', 'handle': 'teamk009user', 'password': 'K009448d!#' }, # Ignored
+  { 'name': 'Team K010 User', 'email': 'teamk010user@cdac.in', 'role': 'participant', 'handle': 'teamk010user', 'password': 'K0104c1e!#' }, # Ignored
+  { 'name': 'Team K011 User', 'email': 'teamk011user@cdac.in', 'role': 'participant', 'handle': 'teamk011user', 'password': 'K0114f70!#' }, # Ignored
   # Admin Users
-  { 'name': 'Admin One', 'email': 'admin1@cdac.in', 'role': 'admin', 'handle': 'admin1', 'password': 'AdminPassword1!#' }, # Excluded
-  { 'name': 'Admin Two', 'email': 'admin2@cdac.in', 'role': 'admin', 'handle': 'admin2', 'password': 'AdminPassword2!#' }, # Excluded
+  { 'name': 'Admin One', 'email': 'admin1@cdac.in', 'role': 'admin', 'handle': 'admin1', 'password': 'AdminPassword1!#' }, # Ignored
+  { 'name': 'Admin Two', 'email': 'admin2@cdac.in', 'role': 'admin', 'handle': 'admin2', 'password': 'AdminPassword2!#' }, # Ignored
 ]
 
 # --- Hardcoded ObjectIds ---
-# List of ObjectIds provided by the user
 hardcoded_oids = [
-    "68038d30016d47bb63ab466f", "68038d30016d47bb63ab466c", "68038d30016d47bb63ab4670",
-    "68038d30016d47bb63ab466e", "68038d30016d47bb63ab466b", "68038d30016d47bb63ab4659",
-    "68038d30016d47bb63ab4665", "68038d30016d47bb63ab4672", "68038d30016d47bb63ab4666",
-    "68038d30016d47bb63ab4669", "68038d30016d47bb63ab4663", "68038d30016d47bb63ab4675",
-    "68038d30016d47bb63ab467b", # teamb009user
-    # Skip teamb010user (b101)
-    "68038d30016d47bb63ab4661", "68038d30016d47bb63ab4679", "68038d30016d47bb63ab4674",
-    "68038d30016d47bb63ab4671", "68038d30016d47bb63ab4678", "68038d30016d47bb63ab4680",
-    "68038d30016d47bb63ab4658", "68038d30016d47bb63ab465d", # teamd009user
-    # Skip teamd010user (d010)
-    "68038d30016d47bb63ab465c", "68038d30016d47bb63ab465e", "68038d30016d47bb63ab4657",
-    "68038d30016d47bb63ab4667", "68038d30016d47bb63ab467d", "68038d30016d47bb63ab4668",
-    "68038d30016d47bb63ab465a", "68038d30016d47bb63ab465f", "68038d30016d47bb63ab4677",
-    "68038d30016d47bb63ab467e", "68038d30016d47bb63ab4676", # teamm011user
-    # Skip teamm012user (m012)
-    "68038d30016d47bb63ab4662", "68038d30016d47bb63ab4660", "68038d30016d47bb63ab467f",
-    "68038d30016d47bb63ab466a", "68038d30016d47bb63ab467c", "68038d30016d47bb63ab4673", # teamk007user
-    # Skip teamk008user, teamk009user, teamk010user, teamk011user
-    # Skip admin1, admin2
+    "68038d30016d47bb63ab4657", "68038d30016d47bb63ab4658", "68038d30016d47bb63ab4659",
+    "68038d30016d47bb63ab465a", "68038d30016d47bb63ab465c", "68038d30016d47bb63ab465d",
+    "68038d30016d47bb63ab465e", "68038d30016d47bb63ab465f", "68038d30016d47bb63ab4660",
+    "68038d30016d47bb63ab4661", "68038d30016d47bb63ab4662", "68038d30016d47bb63ab4663",
+    "68038d30016d47bb63ab4665", "68038d30016d47bb63ab4666", "68038d30016d47bb63ab4667",
+    "68038d30016d47bb63ab4668", "68038d30016d47bb63ab4669", "68038d30016d47bb63ab466a",
+    "68038d30016d47bb63ab466b", "68038d30016d47bb63ab466c", "68038d30016d47bb63ab466e",
+    "68038d30016d47bb63ab466f", "68038d30016d47bb63ab4670", "68038d30016d47bb63ab4671",
+    "68038d30016d47bb63ab4672", "68038d30016d47bb63ab4673", "68038d30016d47bb63ab4674",
+    "68038d30016d47bb63ab4675", "68038d30016d47bb63ab4676", "68038d30016d47bb63ab4677",
+    "68038d30016d47bb63ab4678", "68038d30016d47bb63ab4679", "68038d30016d47bb63ab467b",
+    "68038d30016d47bb63ab467c", "68038d30016d47bb63ab467d", "68038d30016d47bb63ab467e",
+    "68038d30016d47bb63ab467f", "68038d30016d47bb63ab4680"
 ]
 
-# Handles of users to exclude from hardcoded ObjectId assignment
-excluded_handles = {
+# --- Ignored User Handles ---
+ignored_handles = {
     'teamk008user', 'teamb010user', 'teamd010user', 'teamm012user',
     'teamk009user', 'teamk010user', 'teamk011user',
     'admin1', 'admin2'
 }
-
 
 # --- Seeding Logic ---
 client = None # Initialize client to None
@@ -144,41 +136,40 @@ try:
     delete_result = users_collection.delete_many({})
     print(f"📦 Cleared {delete_result.deleted_count} existing user documents.")
 
-    # Prepare users for insertion (hash passwords and assign ObjectIds)
-    print("⚙️ Preparing user data (assigning IDs and hashing passwords)...")
+    # Prepare users for insertion (assign OIDs, hash passwords)
+    print("⚙️ Preparing users for insertion (assigning OIDs, hashing passwords)...")
     users_to_insert = []
-    oid_index = 0 # Index for the hardcoded_oids list
-    for user_data in sample_users:
-        user_handle = user_data.get('handle')
+    oid_iterator = iter(hardcoded_oids)
+    processed_count = 0
+    skipped_count = 0
+    oid_assigned_count = 0
 
-        # Assign hardcoded ObjectId if applicable
-        if user_handle not in excluded_handles and oid_index < len(hardcoded_oids):
-            try:
-                user_data['_id'] = ObjectId(hardcoded_oids[oid_index])
-                print(f"   Assigning ID {hardcoded_oids[oid_index]} to {user_handle}")
-                oid_index += 1
-            except Exception as e:
-                print(f"Warning: Could not assign ObjectId '{hardcoded_oids[oid_index]}' to {user_handle}. Error: {e}. Letting MongoDB generate ID.")
-                # Optionally remove the invalid _id attempt if needed:
-                # if '_id' in user_data: del user_data['_id']
-        else:
-            if user_handle in excluded_handles:
-                print(f"   Skipping hardcoded ID assignment for excluded user: {user_handle}. Letting MongoDB generate ID.")
-            elif oid_index >= len(hardcoded_oids) and user_handle not in excluded_handles:
-                 print(f"   No more hardcoded IDs available for {user_handle}. Letting MongoDB generate ID.")
-            # If _id is not set, MongoDB will generate one automatically
+    for user_data in sample_users:
+        handle = user_data.get('handle')
+        if handle in ignored_handles:
+            print(f"⏭️ Skipping ignored user: {handle}")
+            skipped_count += 1
+            continue # Skip this user
+
+        # Try to assign the next OID
+        try:
+            oid_string = next(oid_iterator)
+            user_data['_id'] = ObjectId(oid_string)
+            oid_assigned_count += 1
+            print(f"🆔 Assigned OID {oid_string} to user: {handle}")
+        except StopIteration:
+            print(f"⚠️ Ran out of hardcoded ObjectIds. User '{handle}' will not be inserted.")
+            # Optionally break here if you don't want to process remaining users
+            # break
+            skipped_count += 1 # Count as skipped if no OID available
+            continue # Skip users if no more OIDs
 
         # Hash password
         plain_password = user_data.get("password")
         if plain_password:
-            # Encode password to bytes, required by bcrypt
             password_bytes = plain_password.encode('utf-8')
-            # Generate salt and hash password
             hashed_password = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
-            # Store the hashed password (as bytes or decode to string if needed by schema)
-            user_data["password"] = hashed_password # Store as bytes (recommended for bcrypt)
-            # If your schema expects a string, decode it:
-            # user_data["password"] = hashed_password.decode('utf-8')
+            user_data["password"] = hashed_password
         else:
              print(f"Warning: User {user_data.get('email')} has no password defined. Skipping hashing.")
 
@@ -188,15 +179,19 @@ try:
         # user_data['updatedAt'] = datetime.now(timezone.utc)
 
         users_to_insert.append(user_data)
-    print("✅ User data prepared.")
+        processed_count += 1
+
+    print(f"✅ User preparation complete. Processed: {processed_count}, Skipped: {skipped_count}, OIDs Assigned: {oid_assigned_count}")
 
     # Insert users
     print(f"👤 Inserting {len(users_to_insert)} users into '{users_collection.name}'...")
     if users_to_insert:
+        # Use ordered=False to continue inserting even if one fails (e.g., duplicate key if run twice without clearing)
+        # Consider setting ordered=True if the order and atomicity of the batch is critical.
         insert_result = users_collection.insert_many(users_to_insert, ordered=False)
         print(f"👥 Successfully inserted {len(insert_result.inserted_ids)} user documents.")
     else:
-        print("🤷 No users to insert.")
+        print("🤷 No users prepared for insertion.")
 
     print("✅ User seeding completed successfully!")
 
