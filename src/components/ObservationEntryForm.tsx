@@ -56,8 +56,8 @@ const severityScores = {
 // Define score values based on event CATEGORY
 const categoryScores = {
   windows: 10,
-  rtu: 10, // Assuming RTU also gets 10, adjust if needed
-  amt: 15,
+  rtu: 15, // Assuming RTU also gets 10, adjust if needed
+  amt: 5,
   plc: 15,
   linux: 10,
   other: 5 // Score for 'Other' category
