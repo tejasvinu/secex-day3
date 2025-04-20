@@ -3,7 +3,9 @@ import pymongo
 import bcrypt
 from dotenv import load_dotenv
 import sys
-from pymongo import uri_parser # Add this import
+from pymongo import uri_parser
+from bson.objectid import ObjectId # Import ObjectId
+import traceback
 
 # Determine the project root directory (assuming the script is in src/scripts)
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,17 +20,17 @@ else:
 
 # --- Configuration ---
 MONGODB_URI = os.environ.get("MONGODB_URI")
-DATABASE_NAME = "secex_day3" # Replace with your actual database name if not in URI
+DATABASE_NAME = "secex_day3" # Default DB name if not in URI
 
 if not MONGODB_URI:
     print("Error: MONGODB_URI environment variable not set.")
-    # Use forward slashes or raw string for the path to avoid unicode escape errors
-    print("Please create a .env.local file in the project root (c:/Users/tejasv/Documents/secex-day3)")
+    # Use forward slashes or raw string for the path
+    print(r"Please create a .env.local file in the project root (e.g., c:\Users\tejasv\Documents\secex-day3)")
     print("and add the MONGODB_URI variable, or set it in your system environment.")
     sys.exit(1)
 
 # --- User Data ---
-# Same user data as provided previously
+# Order matters here - it must correspond to the object_ids list below
 sample_users = [
   # Team Users
   { 'name': 'Team B001 User', 'email': 'teamb001user@cdac.in', 'role': 'participant', 'handle': 'teamb001user', 'password': 'B001470c!#' },
@@ -78,29 +80,74 @@ sample_users = [
   { 'name': 'Team K010 User', 'email': 'teamk010user@cdac.in', 'role': 'participant', 'handle': 'teamk010user', 'password': 'K0104c1e!#' },
   { 'name': 'Team K011 User', 'email': 'teamk011user@cdac.in', 'role': 'participant', 'handle': 'teamk011user', 'password': 'K0114f70!#' },
   # Admin Users
-  { 'name': 'Admin One', 'email': 'admin1@cdac.in', 'role': 'admin', 'handle': 'admin1', 'password': 'AdminPassword1!#' }, # Replace with a strong, unique password
-  { 'name': 'Admin Two', 'email': 'admin2@cdac.in', 'role': 'admin', 'handle': 'admin2', 'password': 'AdminPassword2!#' }, # Replace with a strong, unique password
+  { 'name': 'Admin One', 'email': 'admin1@cdac.in', 'role': 'admin', 'handle': 'admin1', 'password': 'AdminPassword1!#' },
+  { 'name': 'Admin Two', 'email': 'admin2@cdac.in', 'role': 'admin', 'handle': 'admin2', 'password': 'AdminPassword2!#' },
 ]
+
+# --- Hardcoded ObjectIds ---
+# Ensure this list has the EXACT same number of items as sample_users
+# and is in the corresponding order based on creation time/first appearance.
+object_ids = [
+    "68038d30016d47bb63ab466f", "68038d30016d47bb63ab466c",
+    "68038d30016d47bb63ab4670", "68038d30016d47bb63ab466e",
+    "68038d30016d47bb63ab466b", "68038d30016d47bb63ab4659",
+    "68038d30016d47bb63ab4665", "68038d30016d47bb63ab4672",
+    "68038d30016d47bb63ab4666", "68038d30016d47bb63ab4669",
+    "68038d30016d47bb63ab4663", "68038d30016d47bb63ab4675",
+    "68038d30016d47bb63ab467b", "68038d30016d47bb63ab4661",
+    "68038d30016d47bb63ab4679", "68038d30016d47bb63ab4674",
+    "68038d30016d47bb63ab4671", "68038d30016d47bb63ab4678",
+    "68038d30016d47bb63ab4680", "68038d30016d47bb63ab4658",
+    "68038d30016d47bb63ab465d", "68038d30016d47bb63ab465c",
+    "68038d30016d47bb63ab465e", "68038d30016d47bb63ab4657",
+    "68038d30016d47bb63ab4667", "68038d30016d47bb63ab467d",
+    "68038d30016d47bb63ab4668", "68038d30016d47bb63ab465a",
+    "68038d30016d47bb63ab465f", "68038d30016d47bb63ab4677",
+    "68038d30016d47bb63ab467e", "68038d30016d47bb63ab4676",
+    "68038d30016d47bb63ab4662", "68038d30016d47bb63ab4660",
+    "68038d30016d47bb63ab467f", "68038d30016d47bb63ab466a",
+    "68038d30016d47bb63ab467c", "68038d30016d47bb63ab4673",
+    # Add the rest of your ObjectIds here if needed
+    # Make sure the total count is 49 (to match sample_users)
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+    "68038d30016d47bb63ab467e", # Placeholder - replace if needed
+]
+
+# --- Length Check ---
+if len(sample_users) != len(object_ids):
+    print(f"Error: Mismatch between number of users ({len(sample_users)}) and provided ObjectIds ({len(object_ids)}).")
+    print("Please ensure the object_ids list has the same number of elements as the sample_users list.")
+    sys.exit(1)
 
 # --- Seeding Logic ---
 client = None # Initialize client to None
 try:
     print(f"🌱 Attempting to connect to MongoDB: {MONGODB_URI}")
-    # Add serverSelectionTimeoutMS to handle connection issues faster
     client = pymongo.MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
-    # The ismaster command is cheap and does not require auth.
     client.admin.command('ismaster')
     print("✅ Successfully connected to MongoDB server.")
 
-    # Infer database name from URI if not specified, otherwise use DATABASE_NAME
-    db_name = uri_parser.parse_uri(MONGODB_URI)['database'] # Use the imported uri_parser
+    # Infer database name from URI or use default
+    parsed_uri = uri_parser.parse_uri(MONGODB_URI)
+    db_name = parsed_uri.get('database') # Use .get() for safety
     if not db_name:
         if DATABASE_NAME == "your_database_name": # Check if placeholder is still used
-             print(f"Error: Database name not found in URI and DATABASE_NAME placeholder is not replaced.")
-             print("Please specify the database name in your MONGODB_URI or update the DATABASE_NAME variable in the script.")
+             print(f"Error: Database name not found in URI and default placeholder 'your_database_name' is used.")
+             print("Please specify the database name in your MONGODB_URI or update the DATABASE_NAME variable.")
              sys.exit(1)
-        else:
-            db_name = DATABASE_NAME
+        db_name = DATABASE_NAME
+        print(f"Database name not in URI, using default: '{db_name}'")
+    else:
+         print(f"Database name found in URI: '{db_name}'")
+
 
     db = client[db_name]
     users_collection = db["users"] # Assuming your collection is named 'users'
@@ -111,38 +158,50 @@ try:
     delete_result = users_collection.delete_many({})
     print(f"📦 Cleared {delete_result.deleted_count} existing user documents.")
 
-    # Prepare users for insertion (hash passwords)
-    print("🔑 Hashing passwords...")
+    # Prepare users for insertion (assign ID, hash passwords)
+    print("🔧 Preparing users for insertion (assigning IDs and hashing passwords)...")
     users_to_insert = []
-    for user_data in sample_users:
+    # Use zip to iterate through users and their corresponding ObjectIds
+    for user_data, oid_str in zip(sample_users, object_ids):
+        # --- Assign the hardcoded ObjectId FIRST ---
+        try:
+            user_data["_id"] = ObjectId(oid_str)
+        except Exception as id_err:
+             print(f"Error converting ObjectId string '{oid_str}' for user {user_data.get('email')}: {id_err}")
+             continue # Skip this user if ID is invalid
+
+        # --- Hash the password ---
         plain_password = user_data.get("password")
         if plain_password:
-            # Encode password to bytes, required by bcrypt
-            password_bytes = plain_password.encode('utf-8')
-            # Generate salt and hash password
-            hashed_password = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
-            # Store the hashed password (as bytes or decode to string if needed by schema)
-            user_data["password"] = hashed_password # Store as bytes (recommended for bcrypt)
-            # If your schema expects a string, decode it:
-            # user_data["password"] = hashed_password.decode('utf-8')
+            try:
+                password_bytes = plain_password.encode('utf-8')
+                hashed_password = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+                user_data["password"] = hashed_password # Store as bytes
+            except Exception as hash_err:
+                 print(f"Error hashing password for user {user_data.get('email')} (ID: {oid_str}): {hash_err}")
+                 # Decide if you want to skip or insert without password
+                 continue # Skip user if hashing fails
         else:
-             print(f"Warning: User {user_data.get('email')} has no password defined. Skipping hashing.")
+             print(f"Warning: User {user_data.get('email')} (ID: {oid_str}) has no password defined. Skipping hashing.")
 
-        # Add required fields if missing (like timestamps if your schema expects them)
+        # Add timestamps or other fields if needed
         # from datetime import datetime, timezone
         # user_data['createdAt'] = datetime.now(timezone.utc)
         # user_data['updatedAt'] = datetime.now(timezone.utc)
 
         users_to_insert.append(user_data)
-    print("✅ Passwords hashed.")
+    print("✅ User preparation complete.")
 
     # Insert users
-    print(f"👤 Inserting {len(users_to_insert)} users into '{users_collection.name}'...")
+    print(f"👤 Inserting {len(users_to_insert)} prepared users into '{users_collection.name}'...")
     if users_to_insert:
-        insert_result = users_collection.insert_many(users_to_insert, ordered=False)
+        insert_result = users_collection.insert_many(users_to_insert, ordered=False) # ordered=False can speed up bulk inserts slightly
         print(f"👥 Successfully inserted {len(insert_result.inserted_ids)} user documents.")
+        # Verify count matches expected
+        if len(insert_result.inserted_ids) != len(users_to_insert):
+             print(f"Warning: Expected to insert {len(users_to_insert)} users, but only {len(insert_result.inserted_ids)} were inserted.")
     else:
-        print("🤷 No users to insert.")
+        print("🤷 No valid users were prepared for insertion.")
 
     print("✅ User seeding completed successfully!")
 
@@ -154,11 +213,9 @@ except pymongo.errors.OperationFailure as err:
     print(f"   Error details: {err.details}")
 except Exception as e:
     print(f"❌ An unexpected error occurred during seeding: {e}")
-    import traceback
     traceback.print_exc() # Print detailed traceback
 
 finally:
     if client:
         client.close()
         print("🚪 Database connection closed.")
-
