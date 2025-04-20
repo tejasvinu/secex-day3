@@ -41,20 +41,30 @@ import {
   ShieldExclamationIcon,
   CpuChipIcon,
   CommandLineIcon,
-  CheckCircleIcon, // Keep CheckCircleIcon
-  QuestionMarkCircleIcon // Import QuestionMarkCircleIcon
+  CheckCircleIcon, QuestionMarkCircleIcon 
 } from "@heroicons/react/24/outline";
 
-// Define score values for each severity level
+// Define score values for each severity level (KEEP for UI indicators if needed, but not for final score)
 const severityScores = {
-  critical: 30,   // Critical security events
-  high: 15,       // High severity security events
-  medium: 10,     // Medium severity security events
-  low: 5,        // Low severity/routine events
-  informational: 5 // Score for 'Other' or informational events
+  critical: 30,
+  high: 15,
+  medium: 10,
+  low: 5,
+  informational: 5
 };
 
-// Define categorized event options with icons and colors
+// Define score values based on event CATEGORY
+const categoryScores = {
+  windows: 10,
+  rtu: 10, // Assuming RTU also gets 10, adjust if needed
+  amt: 15,
+  plc: 15,
+  linux: 10,
+  other: 5 // Score for 'Other' category
+};
+
+
+// Define categorized event options with icons and colors, using CATEGORY scores
 const eventCategories = {
   windows: {
     name: "Windows Events",
@@ -62,13 +72,14 @@ const eventCategories = {
     color: "bg-blue-100 text-blue-800",
     iconColor: "text-blue-500",
     events: [
-      { value: "win_usb_connect", label: "Connecting USB portable multimedia device", score: severityScores.medium, severity: "medium" },
-      { value: "win_clear_log", label: "Clearing event log", score: severityScores.high, severity: "high" },
-      { value: "win_create_user", label: "Creating user account", score: severityScores.medium, severity: "medium" },
-      { value: "win_delete_user", label: "Deleting user account", score: severityScores.high, severity: "high" },
-      { value: "win_rdp_fail", label: "RDP login failure", score: severityScores.high, severity: "high" },
-      { value: "win_rdp_success", label: "RDP login success", score: severityScores.low, severity: "low" },
-      { value: "win_other", label: "Other Windows Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
+      // Assign category score to all events in this category
+      { value: "win_usb_connect", label: "Connecting USB portable multimedia device", score: categoryScores.windows, severity: "medium" },
+      { value: "win_clear_log", label: "Clearing event log", score: categoryScores.windows, severity: "high" },
+      { value: "win_create_user", label: "Creating user account", score: categoryScores.windows, severity: "medium" },
+      { value: "win_delete_user", label: "Deleting user account", score: categoryScores.windows, severity: "high" },
+      { value: "win_rdp_fail", label: "RDP login failure", score: categoryScores.windows, severity: "high" },
+      { value: "win_rdp_success", label: "RDP login success", score: categoryScores.windows, severity: "low" },
+      { value: "win_other", label: "Other Windows Event (Specify in summary)", score: categoryScores.windows, severity: "informational" }
     ]
   },
   rtu: {
@@ -77,13 +88,14 @@ const eventCategories = {
     color: "bg-green-100 text-green-800",
     iconColor: "text-green-500",
     events: [
-      { value: "rtu_login_fail_pwd", label: "User login failure - wrong password", score: severityScores.high, severity: "high" },
-      { value: "rtu_login_fail_user", label: "User login failure - unknown user", score: severityScores.high, severity: "high" },
-      { value: "rtu_restart", label: "RTU restart", score: severityScores.medium, severity: "medium" },
-      { value: "rtu_upload_config", label: "Upload configuration successfully", score: severityScores.low, severity: "low" },
-      { value: "rtu_download_config", label: "Download configuration files successfully", score: severityScores.low, severity: "low" },
-      { value: "rtu_manual_reset", label: "Manual Reset", score: severityScores.medium, severity: "medium" },
-      { value: "rtu_other", label: "Other RTU Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
+      // Assign category score to all events in this category
+      { value: "rtu_login_fail_pwd", label: "User login failure - wrong password", score: categoryScores.rtu, severity: "high" },
+      { value: "rtu_login_fail_user", label: "User login failure - unknown user", score: categoryScores.rtu, severity: "high" },
+      { value: "rtu_restart", label: "RTU restart", score: categoryScores.rtu, severity: "medium" },
+      { value: "rtu_upload_config", label: "Upload configuration successfully", score: categoryScores.rtu, severity: "low" },
+      { value: "rtu_download_config", label: "Download configuration files successfully", score: categoryScores.rtu, severity: "low" },
+      { value: "rtu_manual_reset", label: "Manual Reset", score: categoryScores.rtu, severity: "medium" },
+      { value: "rtu_other", label: "Other RTU Event (Specify in summary)", score: categoryScores.rtu, severity: "informational" }
     ]
   },
   amt: {
@@ -92,18 +104,19 @@ const eventCategories = {
     color: "bg-red-100 text-red-800",
     iconColor: "text-red-500",
     events: [
-      { value: "amt_port_scan", label: "Port Scan", score: severityScores.high, severity: "low" },
-      { value: "amt_unknown_device_network", label: "Unknown Device Entered the Network", score: severityScores.high, severity: "low" },
-      { value: "amt_unauth_comm", label: "Unauthorized Communication", score: severityScores.critical, severity: "low" },
-      { value: "amt_ip_mac_mismatch", label: "IP MAC Pairing Mismatch", score: severityScores.medium, severity: "medium" },
-      { value: "amt_host_scan", label: "Host Scan", score: severityScores.high, severity: "medium" },
-      { value: "amt_suspected_flooding", label: "Suspected Flooding", score: severityScores.medium, severity: "low" },
-      { value: "amt_dos_attack", label: "DOS Attack", score: severityScores.critical, severity: "low" },
-      { value: "amt_suspicious_apdu", label: "Suspicious APDU from MTU to RTU", score: severityScores.high, severity: "low" },
-      { value: "amt_unknown_device_search", label: "Unknown Device Searching for Host", score: severityScores.medium, severity: "medium" },
-      { value: "amt_tcp_termination", label: "TCP Connection Termination", score: severityScores.low, severity: "low" },
-      { value: "amt_no_comm", label: "No Communication", score: severityScores.medium, severity: "medium" },
-      { value: "amt_other", label: "Other AMT Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
+      // Assign category score to all events in this category
+      { value: "amt_port_scan", label: "Port Scan", score: categoryScores.amt, severity: "low" }, // Severity kept for UI
+      { value: "amt_unknown_device_network", label: "Unknown Device Entered the Network", score: categoryScores.amt, severity: "low" },
+      { value: "amt_unauth_comm", label: "Unauthorized Communication", score: categoryScores.amt, severity: "low" },
+      { value: "amt_ip_mac_mismatch", label: "IP MAC Pairing Mismatch", score: categoryScores.amt, severity: "medium" },
+      { value: "amt_host_scan", label: "Host Scan", score: categoryScores.amt, severity: "medium" },
+      { value: "amt_suspected_flooding", label: "Suspected Flooding", score: categoryScores.amt, severity: "low" },
+      { value: "amt_dos_attack", label: "DOS Attack", score: categoryScores.amt, severity: "low" },
+      { value: "amt_suspicious_apdu", label: "Suspicious APDU from MTU to RTU", score: categoryScores.amt, severity: "low" },
+      { value: "amt_unknown_device_search", label: "Unknown Device Searching for Host", score: categoryScores.amt, severity: "medium" },
+      { value: "amt_tcp_termination", label: "TCP Connection Termination", score: categoryScores.amt, severity: "low" },
+      { value: "amt_no_comm", label: "No Communication", score: categoryScores.amt, severity: "medium" },
+      { value: "amt_other", label: "Other AMT Event (Specify in summary)", score: categoryScores.amt, severity: "informational" }
     ]
   },
   plc: {
@@ -112,10 +125,11 @@ const eventCategories = {
     color: "bg-purple-100 text-purple-800",
     iconColor: "text-purple-500",
     events: [
-      { value: "plc_login_success", label: "Login successful", score: severityScores.low, severity: "low" },
-      { value: "plc_login_denied", label: "Login denied", score: severityScores.high, severity: "high" },
-      { value: "plc_cpu_stop", label: "Current CPU operating mode: STOP", score: severityScores.high, severity: "high" },
-      { value: "plc_other", label: "Other PLC Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
+      // Assign category score to all events in this category
+      { value: "plc_login_success", label: "Login successful", score: categoryScores.plc, severity: "low" },
+      { value: "plc_login_denied", label: "Login denied", score: categoryScores.plc, severity: "high" },
+      { value: "plc_cpu_stop", label: "Current CPU operating mode: STOP", score: categoryScores.plc, severity: "high" },
+      { value: "plc_other", label: "Other PLC Event (Specify in summary)", score: categoryScores.plc, severity: "informational" }
     ]
   },
   linux: {
@@ -124,30 +138,31 @@ const eventCategories = {
     color: "bg-yellow-100 text-yellow-800",
     iconColor: "text-yellow-500",
     events: [
-      { value: "linux_auth_success", label: "Authentication success", score: severityScores.low, severity: "low" },
-      { value: "linux_auth_fail", label: "Authentication failure", score: severityScores.high, severity: "high" },
-      { value: "linux_rm_file", label: "Removed a file/directory using 'rm' command", score: severityScores.medium, severity: "medium" },
-      { value: "linux_other", label: "Other Linux Event (Specify in summary)", score: severityScores.informational, severity: "informational" } // Added Other
+      // Assign category score to all events in this category
+      { value: "linux_auth_success", label: "Authentication success", score: categoryScores.linux, severity: "low" },
+      { value: "linux_auth_fail", label: "Authentication failure", score: categoryScores.linux, severity: "high" },
+      { value: "linux_rm_file", label: "Removed a file/directory using 'rm' command", score: categoryScores.linux, severity: "medium" },
+      { value: "linux_other", label: "Other Linux Event (Specify in summary)", score: categoryScores.linux, severity: "informational" }
     ]
   },
-  // Add the general 'Other' category back
   other: {
     name: "Other Events",
-    icon: QuestionMarkCircleIcon, // Use the imported icon
-    color: "bg-gray-100 text-gray-800", // Neutral color
-    iconColor: "text-gray-500", // Neutral icon color
+    icon: QuestionMarkCircleIcon,
+    color: "bg-gray-100 text-gray-800",
+    iconColor: "text-gray-500",
     events: [
-      { value: "other_event", label: "Other (Specify in summary)", score: severityScores.informational, severity: "informational" } // Define the general 'Other' event
+      // Assign category score
+      { value: "other_event", label: "Other (Specify in summary)", score: categoryScores.other, severity: "informational" }
     ]
   }
 };
 
-// Flatten event options for Zod validation
-const eventOptions = Object.values(eventCategories).flatMap(category => 
+// Flatten event options for Zod validation (This remains the same, it just pulls the updated scores)
+const eventOptions = Object.values(eventCategories).flatMap(category =>
   category.events.map(event => ({
     value: event.value,
     label: `${category.name.split(' ')[0]}: ${event.label}`,
-    score: event.score
+    score: event.score // This will now be the category score
   }))
 );
 
@@ -197,13 +212,14 @@ export function ObservationEntryForm() {
     setSuccess(null);
 
     // Find the selected event to potentially include score later
+    // This logic remains the same, but selectedEvent.score will now hold the category score
     const selectedEvent = eventOptions.find(opt => opt.value === data.eventHeading);
-    const score = selectedEvent ? selectedEvent.score : 0; // Get score, default to 0 if not found
+    const score = selectedEvent ? selectedEvent.score : 0; // Get category score
 
     // Prepare data to send (including score if needed by the API)
     const submissionData = {
       ...data,
-      score: score, // Add score here if your API expects it
+      score: score, // Add category score here
     };
 
     try {

@@ -438,25 +438,52 @@ export default function AdminObservationsPage() {
           return (
             <Card key={obs._id}>
               <CardHeader>
-                <CardTitle>{obs.eventHeading}</CardTitle>
+                <div className="flex justify-between items-start">
+                  <CardTitle>{obs.eventHeading}</CardTitle>
+                  <Badge variant={
+                    obs.isVerified === true ? "default" :
+                    obs.isVerified === false ? "destructive" :
+                    "secondary"
+                  } className={cn(
+                    obs.isVerified === true && "bg-green-500 hover:bg-green-600"
+                  )}>
+                    {
+                      obs.isVerified === true ? 'Verified' :
+                      obs.isVerified === false ? 'Rejected' :
+                      'Unverified'
+                    }
+                  </Badge>
+                </div>
                 <CardDescription>
-                  Submitted by: {obs.userId?.email || 'Unknown User'} at {new Date(obs.submittedAt).toLocaleString()}
+                  Submitted by: {obs.userId?.email || 'Unknown User'} <br />
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(obs.submittedAt).toLocaleString()}
+                  </span>
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <p><strong>Summary:</strong> {obs.eventSummary}</p>
-                <p><strong>Time Noted (in ELK):</strong> {obs.timeNoted}</p>
-                <div className="mt-4 space-y-2">
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="font-semibold text-sm">Summary:</p>
+                  <p className="text-sm text-muted-foreground pl-2">{obs.eventSummary}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">Time Noted (in ELK):</p>
+                  <p className="text-sm text-muted-foreground pl-2">{obs.timeNoted}</p>
+                </div>
+
+                {/* Verification Form */}
+                <div className="pt-4 border-t mt-4 space-y-2">
+                  <h4 className="text-md font-semibold mb-2">Verification</h4>
                   <div>
-                    <Label htmlFor={`score-${obs._id}`}>Score</Label>
+                    <Label htmlFor={`score-${obs._id}`}>Score (if correct)</Label>
                     <Input
                       id={`score-${obs._id}`}
                       type="number"
                       value={formState.score}
                       onChange={(e) => handleFormChange(obs._id, 'score', parseInt(e.target.value, 10) || 0)}
                       min="0"
-                      className="w-24"
-                      disabled={currentStatus.loading}
+                      className="w-24 mt-1"
+                      disabled={currentStatus.loading || obs.isVerified !== null} // Disable if already verified/rejected or loading
                     />
                   </div>
                   <div>
@@ -466,40 +493,47 @@ export default function AdminObservationsPage() {
                       value={formState.notes}
                       onChange={(e) => handleFormChange(obs._id, 'notes', e.target.value)}
                       placeholder="Add verification notes here..."
-                      disabled={currentStatus.loading}
+                      className="mt-1"
+                      disabled={currentStatus.loading || obs.isVerified !== null} // Disable if already verified/rejected or loading
                     />
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between items-center">
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleVerify(obs._id, true)}
-                    disabled={currentStatus.loading}
-                  >
-                    {currentStatus.loading ? 'Verifying...' : 'Mark as Correct'}
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleVerify(obs._id, false)}
-                    disabled={currentStatus.loading}
-                  >
-                    {currentStatus.loading ? 'Verifying...' : 'Mark as Incorrect'}
-                  </Button>
+              <CardFooter className="flex flex-col items-start gap-2 pt-4 border-t">
+                {/* Action Buttons - Only show if unverified */}
+                {obs.isVerified === null && (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleVerify(obs._id, true)}
+                      disabled={currentStatus.loading}
+                    >
+                      {currentStatus.loading ? 'Verifying...' : 'Mark as Correct'}
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleVerify(obs._id, false)}
+                      disabled={currentStatus.loading}
+                    >
+                      {currentStatus.loading ? 'Verifying...' : 'Mark as Incorrect'}
+                    </Button>
+                  </div>
+                )}
+                {/* Status Messages */}
+                <div className="h-6"> {/* Reserve space to prevent layout shifts */}
+                  {currentStatus.error && (
+                    <Badge variant="destructive" className="ml-auto">
+                      <AlertCircle className="h-4 w-4 mr-1" /> Error: {currentStatus.error}
+                    </Badge>
+                  )}
+                  {currentStatus.success && (
+                    <Badge variant="default" className="ml-auto bg-green-500 hover:bg-green-600">
+                      <CheckCircle className="h-4 w-4 mr-1" /> {currentStatus.success}
+                    </Badge>
+                  )}
                 </div>
-                {currentStatus.error && (
-                  <Badge variant="destructive" className="ml-2">
-                    <AlertCircle className="h-4 w-4 mr-1" /> Error: {currentStatus.error}
-                  </Badge>
-                )}
-                {currentStatus.success && (
-                  <Badge variant="default" className="ml-2 bg-green-500 hover:bg-green-600">
-                    <CheckCircle className="h-4 w-4 mr-1" /> {currentStatus.success}
-                  </Badge>
-                )}
               </CardFooter>
             </Card>
           );

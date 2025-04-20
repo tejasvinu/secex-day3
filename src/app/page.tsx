@@ -1,8 +1,30 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Activity, Target, Clock } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect authenticated users to the dashboard
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
+
+  // Don't render the page content if loading session or if authenticated (will redirect)
+  if (status === "loading" || status === "authenticated") {
+    // Optionally, return a loading indicator
+    return null; 
+  }
+
+  // Render the page content only for unauthenticated users
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] text-center px-4 py-8 bg-gradient-to-b from-background to-muted/30">
       <ShieldCheck className="h-16 w-16 text-blue-600 mb-6 animate-pulse" />
@@ -36,11 +58,14 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-12">
-        <Button size="lg" asChild>
-          <Link href="/login">
-            Analyst Login <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
-        </Button>
+        {/* Conditionally render the Login button only if unauthenticated */}
+        {status === 'unauthenticated' && (
+          <Button size="lg" asChild>
+            <Link href="/login">
+              Analyst Login <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+        )}
         <Button size="lg" variant="outline" asChild>
           <Link href="/leaderboard">
             View Live Leaderboard <Activity className="ml-2 h-5 w-5" />

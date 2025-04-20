@@ -7,7 +7,6 @@ import mongoose from 'mongoose';
 
 interface VerifyRequestBody {
   isVerified: boolean | null; // Allow setting back to null if needed, though typically true/false
-  score: number;
   adminNotes?: string;
 }
 
@@ -46,13 +45,34 @@ export async function PUT(
     if (typeof body.isVerified !== 'boolean' && body.isVerified !== null) {
         return NextResponse.json({ message: 'Invalid value for isVerified' }, { status: 400 });
     }
-    if (typeof body.score !== 'number' || body.score < 0) { // Assuming score cannot be negative
-        return NextResponse.json({ message: 'Invalid value for score' }, { status: 400 });
+
+    // Fetch the observation to determine score based on heading
+    const observation = await ObservationModel.findById(observationId);
+    if (!observation) {
+      return NextResponse.json({ message: 'Observation not found' }, { status: 404 });
     }
 
-    const updateData: Partial<VerifyRequestBody> & { adminNotes?: string } = {
+    let calculatedScore = 0; // Default score
+
+    if (body.isVerified === true) {
+        const heading = observation.eventHeading.toLowerCase();
+        if (heading.includes('windows')) {
+            calculatedScore = 10;
+        } else if (heading.includes('plc')) {
+            calculatedScore = 15;
+        } else if (heading.includes('amt')) { // Assuming 'amt' is another category
+            calculatedScore = 15;
+        } else {
+            calculatedScore = 10; // Default score for other verified events
+        }
+    } else if (body.isVerified === false) {
+        calculatedScore = 0; // Score is 0 if rejected
+    }
+    // If isVerified is null, score remains 0 (or could retain previous score if needed)
+
+    const updateData: { isVerified: boolean | null; score: number; adminNotes?: string } = {
         isVerified: body.isVerified,
-        score: body.score,
+        score: calculatedScore,
     };
 
     if (body.adminNotes !== undefined) {
@@ -64,10 +84,6 @@ export async function PUT(
       { $set: updateData },
       { new: true } // Return the updated document
     );
-
-    if (!updatedObservation) {
-      return NextResponse.json({ message: 'Observation not found' }, { status: 404 });
-    }
 
     return NextResponse.json(updatedObservation, { status: 200 });
 
